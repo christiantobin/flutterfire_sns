@@ -124,14 +124,40 @@ class _HomePageState extends State<HomePage> {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       String? token = await FirebaseMessaging.instance.getAPNSToken();
       print('APNs Token: $token');
-      var platform = 'iOS';
     } else if (defaultTargetPlatform == TargetPlatform.android) {
       String? token = await FirebaseMessaging.instance.getToken();
       print('FCM Token: $token');
-      var platform = 'android';
     }
-    var topic = 'testSNS';
-    var client = http.Client();
+  }
+
+  Future<void> unsubscribe() async {
+    print('This should delete the platformEndPoint');
+  }
+
+  Future<void> subscribeTopic() async {
+    print('This should send IoT Date to register and subscribe to');
+  }
+
+  Future<void> onActionSelected(String value) async {
+    switch (value) {
+      case 'subscribe':
+        {
+          await subscribe();
+        }
+        break;
+      case 'unsubscribe':
+        {
+          await unsubscribe();
+        }
+        break;
+      case 'iotDevice':
+        {
+          await subscribeTopic();
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   @override
@@ -139,6 +165,27 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          PopupMenuButton(
+            onSelected: onActionSelected,
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem(
+                  value: 'subscribe',
+                  child: Text('Subscribe to SNS'),
+                ),
+                const PopupMenuItem(
+                  value: 'unsubscribe',
+                  child: Text('Unsubscribe to SNS'),
+                ),
+                const PopupMenuItem(
+                  value: 'iotDevice',
+                  child: Text('Subscribe IoT Device Example'),
+                ),
+              ];
+            },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: subscribe,
