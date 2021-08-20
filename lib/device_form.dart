@@ -55,7 +55,7 @@ class DeviceFormState extends State<DeviceForm> {
   Widget desiredValField() {
     return TextFormField(
       decoration: InputDecoration(
-        labelText: 'Enter Value',
+        labelText: 'Enter Desired Value',
       ),
       onSaved: (String? value) {
         if (value != null) {
