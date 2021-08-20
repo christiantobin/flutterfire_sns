@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import './device_form.dart';
 
 // Android Notification Channel for Local Notification
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -68,9 +69,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final _formKey = GlobalKey<FormState>();
-  // String _device = '';
-  // String _desiredVal = '';
+  final formKey = GlobalKey<FormState>();
+  String device = '';
+  String desiredVal = '';
 
   @override
   void initState() {
@@ -149,28 +150,28 @@ class _HomePageState extends State<HomePage> {
     print('This should delete the platformEndPoint');
   }
 
-  Future<void> subscribeDevice() async {
-    print('This should send IoT Date to register and subscribe to');
-    var url = Uri.parse(
-        'https://0t52mixuj9.execute-api.us-east-1.amazonaws.com/prod/update');
+  // Future<void> subscribeDevice() async {
+  //   print('This should send IoT Date to register and subscribe to');
+  //   var url = Uri.parse(
+  //       'https://0t52mixuj9.execute-api.us-east-1.amazonaws.com/prod/update');
 
-    var data = {
-      "serial": 'test',
-      "payload": {
-        "state": {
-          "desired": {"heatTo": 100}
-        }
-      }
-    };
+  //   var data = {
+  //     "serial": 'test',
+  //     "payload": {
+  //       "state": {
+  //         "desired": {"heatTo": 100}
+  //       }
+  //     }
+  //   };
 
-    var body = convert.jsonEncode(data);
+  //   var body = convert.jsonEncode(data);
 
-    var headers = {'Content-Type': 'application/json'};
+  //   var headers = {'Content-Type': 'application/json'};
 
-    var response = await http.put(url, headers: headers, body: body);
-    print('Response Status: ${response.statusCode}');
-    print('Response Body: ${response.body}');
-  }
+  //   var response = await http.put(url, headers: headers, body: body);
+  //   print('Response Status: ${response.statusCode}');
+  //   print('Response Body: ${response.body}');
+  // }
 
   Future<void> onActionSelected(String value) async {
     switch (value) {
@@ -207,16 +208,12 @@ class _HomePageState extends State<HomePage> {
                   value: 'unsubscribe',
                   child: Text('Unsubscribe to SNS'),
                 ),
-                const PopupMenuItem(
-                  value: 'iotDevice',
-                  child: Text('Subscribe IoT Device Example'),
-                ),
               ];
             },
           ),
         ],
       ),
-      body: FormBuilder(),
+      body: DeviceForm(),
       floatingActionButton: FloatingActionButton(
         onPressed: subscribe,
         child: Icon(Icons.bookmark),
