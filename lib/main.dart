@@ -68,6 +68,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // final _formKey = GlobalKey<FormState>();
+  // String _device = '';
+  // String _desiredVal = '';
+
   @override
   void initState() {
     super.initState();
@@ -121,21 +125,51 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> subscribe() async {
+    var token;
+
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      String? token = await FirebaseMessaging.instance.getAPNSToken();
+      token = await FirebaseMessaging.instance.getAPNSToken();
       print('APNs Token: $token');
     } else if (defaultTargetPlatform == TargetPlatform.android) {
-      String? token = await FirebaseMessaging.instance.getToken();
+      token = await FirebaseMessaging.instance.getToken();
       print('FCM Token: $token');
     }
+    var headers = {'Content-Type': 'application/json'};
+    var url = Uri.parse(
+        'https://0t52mixuj9.execute-api.us-east-1.amazonaws.com/prod/provision');
+
+    var data = {'token': token, 'serial': 'testSNS'};
+    var body = convert.jsonEncode(data);
+    var response = await http.post(url, headers: headers, body: body);
+    print('Response Status: ${response.statusCode}');
+    print('Response Body: ${response.body}');
   }
 
   Future<void> unsubscribe() async {
     print('This should delete the platformEndPoint');
   }
 
-  Future<void> subscribeTopic() async {
+  Future<void> subscribeDevice() async {
     print('This should send IoT Date to register and subscribe to');
+    var url = Uri.parse(
+        'https://0t52mixuj9.execute-api.us-east-1.amazonaws.com/prod/update');
+
+    var data = {
+      "serial": 'test',
+      "payload": {
+        "state": {
+          "desired": {"heatTo": 100}
+        }
+      }
+    };
+
+    var body = convert.jsonEncode(data);
+
+    var headers = {'Content-Type': 'application/json'};
+
+    var response = await http.put(url, headers: headers, body: body);
+    print('Response Status: ${response.statusCode}');
+    print('Response Body: ${response.body}');
   }
 
   Future<void> onActionSelected(String value) async {
@@ -148,11 +182,6 @@ class _HomePageState extends State<HomePage> {
       case 'unsubscribe':
         {
           await unsubscribe();
-        }
-        break;
-      case 'iotDevice':
-        {
-          await subscribeTopic();
         }
         break;
       default:
@@ -187,6 +216,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      body: FormBuilder(),
       floatingActionButton: FloatingActionButton(
         onPressed: subscribe,
         child: Icon(Icons.bookmark),
