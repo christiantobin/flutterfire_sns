@@ -70,8 +70,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final formKey = GlobalKey<FormState>();
-  String device = '';
-  String desiredVal = '';
 
   @override
   void initState() {
@@ -125,26 +123,27 @@ class _HomePageState extends State<HomePage> {
     print("Firebase token = " + (token ?? ""));
   }
 
-  Future<void> subscribe() async {
-    var token;
+  // Future<void> subscribe() async {
+  //   var token;
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      token = await FirebaseMessaging.instance.getAPNSToken();
-      print('APNs Token: $token');
-    } else if (defaultTargetPlatform == TargetPlatform.android) {
-      token = await FirebaseMessaging.instance.getToken();
-      print('FCM Token: $token');
-    }
-    var headers = {'Content-Type': 'application/json'};
-    var url = Uri.parse(
-        'https://0t52mixuj9.execute-api.us-east-1.amazonaws.com/prod/provision');
+  //   if (defaultTargetPlatform == TargetPlatform.iOS) {
+  //     token = await FirebaseMessaging.instance.getAPNSToken();
+  //     print('APNs Token: $token');
+  //   } else if (defaultTargetPlatform == TargetPlatform.android) {
+  //     token = await FirebaseMessaging.instance.getToken();
+  //     print('FCM Token: $token');
+  //   }
+  //   var headers = {'Content-Type': 'application/json'};
+  //   var url = Uri.parse(
+  //       'https://0t52mixuj9.execute-api.us-east-1.amazonaws.com/prod/provision');
 
-    var data = {'token': token, 'serial': 'testSNS'};
-    var body = convert.jsonEncode(data);
-    var response = await http.post(url, headers: headers, body: body);
-    print('Response Status: ${response.statusCode}');
-    print('Response Body: ${response.body}');
-  }
+  //   var data = {'token': token, 'serial': device};
+  //   var body = convert.jsonEncode(data);
+  //   var response = await http.post(url, headers: headers, body: body);
+  //   print(data);
+  //   print('Response Status: ${response.statusCode}');
+  //   print('Response Body: ${response.body}');
+  // }
 
   Future<void> unsubscribe() async {
     print('This should delete the platformEndPoint');
@@ -175,11 +174,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> onActionSelected(String value) async {
     switch (value) {
-      case 'subscribe':
-        {
-          await subscribe();
-        }
-        break;
       case 'unsubscribe':
         {
           await unsubscribe();
@@ -214,10 +208,6 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: DeviceForm(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: subscribe,
-        child: Icon(Icons.bookmark),
-      ),
     );
   }
 }
