@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import './device_form.dart';
 
+// todo: Implement Modal for Notification Permission
+// Create platformEndpoint if permission granted, else do nothing.
+
 // Android Notification Channel for Local Notification
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
