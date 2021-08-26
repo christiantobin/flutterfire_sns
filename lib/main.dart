@@ -7,9 +7,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import './device_form.dart';
 
-// Create platformEndpoint if permission granted, else do nothing.
-
 // Android Notification Channel for Local Notification
+// This allows the heads up notification to appear while the app is both in the background and foreground
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
@@ -33,6 +32,7 @@ Future<void> main() async {
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
+  // iOS Notification Permission Settings
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
     announcement: false,
@@ -43,6 +43,7 @@ Future<void> main() async {
     sound: true,
   );
 
+  // todo: iOS permissions
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     print('User granted permission');
   } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
@@ -97,6 +98,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
+    // Listens for incoming messages and routes to the appropriate Android Channel
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -118,6 +120,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
+    // Displays the notifications when a user taps on the push notification, opening the app
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('A new onMessageOpenedApp event was published!');
       RemoteNotification? notification = message.notification;
@@ -141,6 +144,8 @@ class _HomePageState extends State<HomePage> {
     getFCMToken();
   }
 
+  // Get FCM token (android only)
+  // In order to receive the iOS formatted token, use .getAPNSToken() method.
   Future<void> getFCMToken() async {
     String? token = await FirebaseMessaging.instance.getToken();
     print("Firebase token = " + (token ?? ""));
