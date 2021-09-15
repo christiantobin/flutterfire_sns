@@ -25,20 +25,20 @@ class DeviceFormState extends State<DeviceForm> {
         key: formKey,
         child: Column(
           children: [
-            deviceField(),
-            desiredValField(),
+            //deviceField(),
+            //desiredValField(),
             Container(
               margin: EdgeInsets.only(top: 25.0),
             ),
-            registerDevice(),
-            submitButton(),
+            //registerDevice(),
+            //submitButton(),
           ],
         ),
       ),
     );
   }
 
-  Widget deviceField() {
+  /*Widget deviceField() {
     return TextFormField(
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
@@ -50,9 +50,9 @@ class DeviceFormState extends State<DeviceForm> {
         }
       },
     );
-  }
+  }*/
 
-  Widget desiredValField() {
+/*  Widget desiredValField() {
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'Enter Desired Value',
@@ -63,9 +63,9 @@ class DeviceFormState extends State<DeviceForm> {
         }
       },
     );
-  }
+  }*/
 
-  Widget submitButton() {
+  /*Widget submitButton() {
     return ElevatedButton(
       child: Text('Submit Device Event'),
       onPressed: () async {
@@ -99,9 +99,9 @@ class DeviceFormState extends State<DeviceForm> {
         }
       },
     );
-  }
+  }*/
 
-  Widget registerDevice() {
+  /*Widget registerDevice() {
     return ElevatedButton(
       child: Text('Register Device'),
       onPressed: () async {
@@ -122,5 +122,5 @@ class DeviceFormState extends State<DeviceForm> {
         }
       },
     );
-  }
+  }*/
 }

@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> subscribe() async {
     var token;
-
+    const UserId = 'userid-a';
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       token = await FirebaseMessaging.instance.getAPNSToken();
       print('APNs Token: $token');
@@ -163,9 +163,9 @@ class _HomePageState extends State<HomePage> {
     }
     var headers = {'Content-Type': 'application/json'};
     var url = Uri.parse(
-        'https://0t52mixuj9.execute-api.us-east-1.amazonaws.com/prod/register');
+        'https://97dimgqvsd.execute-api.us-west-2.amazonaws.com/dev/register');
 
-    var data = {'token': token};
+    var data = {'Token': token, 'UserId': UserId, 'AppType': 'Android', 'Language': 'English'};
     var body = convert.jsonEncode(data);
     var response = await http.post(url, headers: headers, body: body);
     print(data);
@@ -175,7 +175,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> unsubscribe() async {
-    print('This should delete the platformEndPoint');
+   var token;
+    const UserId = 'userid-a';
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      token = await FirebaseMessaging.instance.getAPNSToken();
+      print('APNs Token: $token');
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
+      token = await FirebaseMessaging.instance.getToken();
+      print('FCM Token: $token');
+    }
+    var headers = {'Content-Type': 'application/json'};
+    var url = Uri.parse(
+        'https://97dimgqvsd.execute-api.us-west-2.amazonaws.com/dev/unregister');
+
+    var data = {'Token': token, 'UserId': UserId, 'AppType': 'Android'};
+    var body = convert.jsonEncode(data);
+    var response = await http.post(url, headers: headers, body: body);
+    print(data);
+    print('Response Status: ${response.statusCode}');
+    print('Response Body: ${response.body}'); 
   }
 
   // Future<void> subscribeDevice() async {
@@ -209,6 +227,7 @@ class _HomePageState extends State<HomePage> {
         }
         break;
       default:
+        await subscribe();
         break;
     }
   }
